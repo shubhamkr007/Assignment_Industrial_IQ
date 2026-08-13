@@ -1,0 +1,90 @@
+@import "tailwindcss";
+
+:root {
+  --paper: #f2f4f7;
+  --paper-raised: #ffffff;
+  --paper-2: #eaecf0;
+  --ink: #1d2939;
+  --ink-soft: #667085;
+  --line: #e4e7ec;
+  --accent: #465fff;
+  --accent-soft: #e0e7ff;
+  --copper: #f79009;
+  --copper-soft: #fef0c7;
+  --danger: #f04438;
+  --danger-soft: #fee4e2;
+  --warn: #f79009;
+  --warn-soft: #fef0c7;
+  --ok: #12b76a;
+  --ok-soft: #d1fadf;
+  --sidebar: #ffffff;
+  --sidebar-text: #344054;
+  --sidebar-muted: #667085;
+  --brand: #465fff;
+}
+
+@theme inline {
+  --color-paper: var(--paper);
+  --color-paper-raised: var(--paper-raised);
+  --color-paper-2: var(--paper-2);
+  --color-ink: var(--ink);
+  --color-ink-soft: var(--ink-soft);
+  --color-line: var(--line);
+  --color-accent: var(--accent);
+  --color-accent-soft: var(--accent-soft);
+  --color-copper: var(--copper);
+  --color-copper-soft: var(--copper-soft);
+  --color-danger: var(--danger);
+  --color-danger-soft: var(--danger-soft);
+  --color-warn: var(--warn);
+  --color-warn-soft: var(--warn-soft);
+  --color-ok: var(--ok);
+  --color-ok-soft: var(--ok-soft);
+  --color-sidebar: var(--sidebar);
+  --color-sidebar-text: var(--sidebar-text);
+  --color-sidebar-muted: var(--sidebar-muted);
+  --color-brand: var(--brand);
+  --font-sans: var(--font-geist);
+  --font-serif: var(--font-instrument);
+}
+
+* {
+  border-color: var(--line);
+}
+
+html,
+body {
+  background: var(--paper);
+  color: var(--ink);
+}
+
+body {
+  font-family: var(--font-sans), ui-sans-serif, system-ui, sans-serif;
+  min-height: 100vh;
+}
+
+::selection {
+  background: var(--accent-soft);
+  color: var(--ink);
+}
+
+.serif {
+  font-family: var(--font-serif), ui-serif, Georgia, serif;
+}
+
+.tabular {
+  font-variant-numeric: tabular-nums;
+}
+
+@keyframes pulse-bar {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(400%);
+  }
+}
+
+.pending-bar {
+  animation: pulse-bar 1.1s ease-in-out infinite;
+}
