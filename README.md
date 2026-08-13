@@ -2,6 +2,8 @@
 
 A dealership performance dashboard for a five-branch Toyota group. Surfaces sales KPIs, funnel diagnostics, and recommended actions for group leadership and branch managers.
 
+**Repository:** [github.com/shubhamkr007/Assignment_Industrial_IQ](https://github.com/shubhamkr007/Assignment_Industrial_IQ)
+
 ## Run locally
 
 ```bash
@@ -26,9 +28,8 @@ npx vercel --prod
 
 **Option B — Vercel Dashboard**
 
-1. Push this repository to GitHub.
-2. Import the project at [vercel.com/new](https://vercel.com/new).
-3. Use the default Next.js settings and deploy.
+1. Import [this repository](https://github.com/shubhamkr007/Assignment_Industrial_IQ) at [vercel.com/new](https://vercel.com/new).
+2. Use the default Next.js settings and deploy.
 
 The dataset ships in `data/dealership_data.json` and is bundled at build time.
 
