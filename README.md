@@ -4,6 +4,8 @@ A dealership performance dashboard for a five-branch Toyota group. Surfaces sale
 
 **Repository:** [github.com/shubhamkr007/Assignment_Industrial_IQ](https://github.com/shubhamkr007/Assignment_Industrial_IQ)
 
+**Live demo:** [dealerpulse-omega.vercel.app](https://dealerpulse-omega.vercel.app)
+
 ## Run locally
 
 ```bash
