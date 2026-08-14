@@ -1,5 +1,5 @@
 import { Box, Users } from "lucide-react";
-import { InsightBanner } from "@/components/dashboard/InsightBanner";
+import { ExecutiveSummaryBanner } from "@/components/dashboard/ExecutiveSummary";
 import { KpiStrip } from "@/components/dashboard/KpiStrip";
 import { KpiCard } from "@/components/dashboard/KpiCard";
 import { BranchTable } from "@/components/dashboard/BranchTable";
@@ -15,6 +15,7 @@ import { ChannelDonut } from "@/components/charts/ChannelDonut";
 import { LostReasonBars } from "@/components/charts/LostReasonBars";
 import { BranchCompare } from "@/components/charts/BranchCompare";
 import { buildDashboard } from "@/lib/dashboard";
+import { getExecutiveSummary } from "@/lib/ai/summary";
 import { queryFrom } from "@/lib/query";
 import { peerFunnel } from "@/lib/metrics/branches";
 import { isIncompleteCohort } from "@/lib/metrics/period";
@@ -29,6 +30,7 @@ export default async function OverviewPage({
 }) {
   const params = await searchParams;
   const model = buildDashboard(params);
+  const summary = await getExecutiveSummary(params);
   const query = queryFrom(params);
   const fire = [...model.cards].sort((a, b) => a.conversion - b.conversion)[0];
   const playbook = [...model.cards].sort((a, b) => b.conversion - a.conversion)[0];
@@ -71,7 +73,7 @@ export default async function OverviewPage({
         </div>
       </div>
 
-      <InsightBanner insight={model.insights[0] ?? null} />
+      <ExecutiveSummaryBanner summary={summary} asOf={model.asOf} />
 
       <KpiStrip
         kpis={model.kpis}

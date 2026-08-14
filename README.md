@@ -18,7 +18,22 @@ Open [http://localhost:3000](http://localhost:3000).
 
 ## Deploy to Vercel
 
-This is a standard Next.js App Router project. No environment variables or database are required.
+This is a standard Next.js App Router project. No database is required.
+
+**Optional — AI executive summary**
+
+The overview page can generate an AI narrative when `OPENAI_API_KEY` is set. All metrics in the summary chips are computed server-side; the model writes qualitative headline and body text only (no invented numbers). Without a key, a metrics-based summary is shown automatically.
+
+```bash
+cp .env.example .env.local
+# add OPENAI_API_KEY=sk-...
+```
+
+| Variable | Required | Description |
+|----------|----------|-------------|
+| `OPENAI_API_KEY` | No | Enables AI narrative on overview |
+| `AI_SUMMARY_MODEL` | No | Default `gpt-4o-mini` |
+| `AI_SUMMARY_ENABLED` | No | Set `false` to disable AI |
 
 **Option A — Vercel CLI**
 
