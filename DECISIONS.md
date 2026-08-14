@@ -59,7 +59,10 @@ Branches are ranked by conversion and operational SLAs. Health labels are **Top 
 
 - **Aging as the primary metric** — As of 31 Dec, only about six open pre-order leads are idle 7+ days. Historical uncontacted losses are the stronger signal and appear in the action queue.
 - **Forecasting** — Comparing 38 sold-not-delivered units to a 218-unit December group target would misrepresent the pipeline.
-- **AI summaries, CSV export, maps, chatbots, anomaly detection, interactive what-if sliders, separate deliveries module, dark mode.**
+- **Paid LLM APIs, CSV export, maps, chatbots, anomaly detection, interactive what-if sliders, separate deliveries module, dark mode.**
+- **Forecasting as hero metric** — pipeline vs target would misrepresent this dataset.
+
+We built a **rule-based executive summary** (`lib/ai/summarizer.ts`) instead of a paid LLM — metrics stay exact, narrative is assembled from scored insight themes.
 
 Raw `status_history` notes are cleaned before display (e.g. the `"Customer comparing with {} competitor"` placeholder).
 
