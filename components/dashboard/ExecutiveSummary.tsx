@@ -39,9 +39,7 @@ export function ExecutiveSummaryBanner({
         >
           {summary.severity}
         </Badge>
-        <Badge tone={summary.source === "ai" ? "ok" : "neutral"}>
-          {summary.source === "ai" ? "AI narrative" : "Metrics-based"}
-        </Badge>
+        <Badge tone="neutral">Rule-based engine</Badge>
         <span className="text-xs text-ink-soft">As of {asOf}</span>
       </div>
 
@@ -51,6 +49,20 @@ export function ExecutiveSummaryBanner({
       <p className="mt-2 max-w-3xl text-sm leading-relaxed text-ink-soft">
         {summary.body}
       </p>
+
+      {summary.priorities.length > 0 ? (
+        <ul className="mt-3 space-y-1.5">
+          {summary.priorities.map((item) => (
+            <li
+              key={item}
+              className="flex gap-2 text-xs leading-relaxed text-ink-soft"
+            >
+              <span className="mt-1.5 h-1 w-1 shrink-0 rounded-full bg-accent" />
+              <span>{item}</span>
+            </li>
+          ))}
+        </ul>
+      ) : null}
 
       <dl className="mt-4 grid grid-cols-2 gap-2 sm:grid-cols-3 lg:grid-cols-6">
         {summary.highlights.map((item) => (

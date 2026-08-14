@@ -1,11 +1,10 @@
 import assert from "node:assert/strict";
 import { describe, it } from "node:test";
 import { buildSummaryContext, buildSummaryHighlights } from "@/lib/ai/context";
-import { buildDeterministicSummary } from "@/lib/ai/deterministic";
-import { parseAiDraft, validateAiDraft } from "@/lib/ai/validate";
+import { buildExecutiveSummary } from "@/lib/ai/summarizer";
 import { buildDashboard } from "@/lib/dashboard";
 
-describe("AI summary context", () => {
+describe("summary engine context", () => {
   it("builds highlights from verified KPIs", () => {
     const model = buildDashboard({ period: "december" });
     const ctx = buildSummaryContext(model);
@@ -22,53 +21,47 @@ describe("AI summary context", () => {
     );
   });
 
-  it("deterministic summary includes accurate retail counts", () => {
+  it("computes target attainment from metrics", () => {
     const model = buildDashboard({ period: "december" });
     const ctx = buildSummaryContext(model);
-    const summary = buildDeterministicSummary(ctx);
-
-    assert.match(summary.body, new RegExp(`${ctx.kpis.retailUnits}`));
-    assert.match(summary.body, new RegExp(`${ctx.kpis.targetUnits}`));
-    assert.equal(summary.source, "deterministic");
-    assert.ok(summary.highlights.length >= 4);
+    assert.equal(
+      ctx.targetAttainment,
+      model.kpis.retailUnits / model.kpis.targetUnits,
+    );
   });
 });
 
-describe("AI summary validation", () => {
-  const ctx = buildSummaryContext(buildDashboard({ period: "december" }));
+describe("summary engine", () => {
+  it("includes accurate retail counts in the narrative", () => {
+    const model = buildDashboard({ period: "december" });
+    const ctx = buildSummaryContext(model);
+    const summary = buildExecutiveSummary(ctx);
 
-  it("rejects drafts that invent numbers", () => {
-    assert.equal(
-      validateAiDraft(
-        {
-          headline: "Lakeside needs attention",
-          body: "Conversion is 7.6% and 33 leads were lost.",
-        },
-        ctx,
-      ),
-      false,
-    );
+    assert.match(summary.body, new RegExp(`${ctx.kpis.retailUnits}`));
+    assert.match(summary.body, new RegExp(`${ctx.kpis.targetUnits}`));
+    assert.equal(summary.source, "engine");
+    assert.ok(summary.highlights.length >= 4);
+    assert.ok(summary.priorities.length >= 1);
   });
 
-  it("accepts qualitative drafts without metrics", () => {
-    assert.equal(
-      validateAiDraft(
-        {
-          headline: "Prioritize first-contact discipline at Lakeside Toyota",
-          body: "Branch performance diverges from peers. Focus on contact policy and delivery backlog before month-end reviews.",
-        },
-        ctx,
-      ),
-      true,
-    );
+  it("prioritizes december wipeout in december period", () => {
+    const model = buildDashboard({ period: "december" });
+    const ctx = buildSummaryContext(model);
+    const summary = buildExecutiveSummary(ctx);
+
+    assert.match(summary.headline, /December|Lakeside/i);
+    assert.equal(summary.severity, "critical");
   });
 
-  it("parses valid JSON drafts", () => {
-    const draft = parseAiDraft({
-      headline: "Review branch execution",
-      body: "Address contact gaps and delivery delays.",
-    });
-    assert.ok(draft);
-    assert.equal(draft?.headline, "Review branch execution");
+  it("surfaces branch gap when viewing the group", () => {
+    const model = buildDashboard({ period: "all" });
+    const ctx = buildSummaryContext(model);
+    const summary = buildExecutiveSummary(ctx);
+
+    assert.ok(
+      summary.body.includes("Lakeside") ||
+        summary.body.includes("Downtown") ||
+        summary.priorities.some((p) => p.includes("Lakeside") || p.includes("Downtown")),
+    );
   });
 });

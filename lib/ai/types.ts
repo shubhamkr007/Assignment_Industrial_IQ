@@ -1,6 +1,6 @@
 import type { InsightSeverity } from "@/lib/insights";
 
-export type SummarySource = "ai" | "deterministic";
+export type SummarySource = "engine";
 
 export interface SummaryHighlight {
   label: string;
@@ -15,12 +15,16 @@ export interface SummaryCandidate {
   verb: string;
   href: string;
   cta: string;
+  count?: number;
+  value?: number;
 }
 
 export interface SummaryContext {
   period: string;
   asOf: string;
   scopeLabel: string;
+  branchId: string | null;
+  branchName: string | null;
   kpis: {
     retailUnits: number;
     targetUnits: number;
@@ -33,6 +37,8 @@ export interface SummaryContext {
     retailRevenue: number;
   };
   previousRetailUnits: number | null;
+  targetAttainment: number | null;
+  retailMomChange: number | null;
   branches: Array<{
     name: string;
     health: string;
@@ -41,7 +47,6 @@ export interface SummaryContext {
   }>;
   candidates: SummaryCandidate[];
   primaryFunnelDrop: string | null;
-  allowedBranchNames: string[];
 }
 
 export interface ExecutiveSummary {
@@ -53,9 +58,5 @@ export interface ExecutiveSummary {
   href: string;
   cta: string;
   highlights: SummaryHighlight[];
-}
-
-export interface AiSummaryDraft {
-  headline: string;
-  body: string;
+  priorities: string[];
 }

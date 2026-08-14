@@ -34,16 +34,28 @@ function primaryFunnelDrop(model: DashboardModel): string | null {
   return worst?.stage ?? null;
 }
 
+function momChange(current: number, previous: number | null): number | null {
+  if (previous == null || previous === 0) return null;
+  return (current - previous) / previous;
+}
+
 export function buildSummaryContext(model: DashboardModel): SummaryContext {
   const ranked = [...model.cards].sort((a, b) => a.conversion - b.conversion);
+  const branch = model.filters.branchId
+    ? model.dataset.branches.find((b) => b.id === model.filters.branchId)
+    : null;
+  const retailUnits = model.kpis.retailUnits;
+  const targetUnits = model.kpis.targetUnits;
 
   return {
     period: model.filters.range.label,
     asOf: model.asOf,
     scopeLabel: buildScopeLabel(model),
+    branchId: model.filters.branchId,
+    branchName: branch?.name ?? null,
     kpis: {
-      retailUnits: model.kpis.retailUnits,
-      targetUnits: model.kpis.targetUnits,
+      retailUnits,
+      targetUnits,
       bookings: model.kpis.bookings,
       neverContactedLost: model.kpis.neverContactedLost,
       soldWaiting: model.kpis.soldWaiting,
@@ -53,6 +65,8 @@ export function buildSummaryContext(model: DashboardModel): SummaryContext {
       retailRevenue: model.kpis.retailRevenue,
     },
     previousRetailUnits: model.previousKpis?.retailUnits ?? null,
+    targetAttainment: targetUnits > 0 ? retailUnits / targetUnits : null,
+    retailMomChange: momChange(retailUnits, model.previousKpis?.retailUnits ?? null),
     branches: ranked.map((card) => ({
       name: card.name,
       health: HEALTH_LABEL[card.health] ?? card.health,
@@ -67,9 +81,10 @@ export function buildSummaryContext(model: DashboardModel): SummaryContext {
       verb: insight.verb,
       href: insight.href,
       cta: insight.cta,
+      count: insight.count,
+      value: insight.value,
     })),
     primaryFunnelDrop: primaryFunnelDrop(model),
-    allowedBranchNames: model.dataset.branches.map((b) => b.name),
   };
 }
 
